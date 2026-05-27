@@ -69,6 +69,6 @@ docker_backend:
 
   script:
     - echo "Building Docker image..."
-    - docker build -t "$CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHA" ./backend/
+    - docker build -t "$CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHA" ./api/
     - echo "Pushing Docker image..."
     - docker push "$CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHA"
