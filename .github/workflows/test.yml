@@ -37,13 +37,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Tag avec SHA
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          TAG: ${{ github.sha }}
-        run: |
-          docker tag $DOCKER_USERNAME/react-cicd-api:latest $DOCKER_USERNAME/react-cicd-api:$TAG
-          docker tag $DOCKER_USERNAME/react-cicd-frontend:latest $DOCKER_USERNAME/react-cicd-frontend:$TAG
       - name: Push
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
