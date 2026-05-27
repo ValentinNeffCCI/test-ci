@@ -51,13 +51,16 @@ jobs:
           docker push $DOCKER_USERNAME/react-cicd-api:$TAG
           docker push $DOCKER_USERNAME/react-cicd-frontend:$TAG
 
-  # connect_to_vps:
-  #   runs-on: ubuntu-latest
-  #   needs: verify_and_build
+  connect_to_vps:
+    runs-on: ubuntu-latest
+    needs: verify_and_build
 
-  #   steps:
-  #     - name: connect to vps
-  #       run: ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
+    steps:
+      - name: connect to vps
+        run: ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
+
+      - name: verify_connection
+        run: ls
 
   #     - name: stop working docker
   #       run: docker stop $(docker ps -q)
