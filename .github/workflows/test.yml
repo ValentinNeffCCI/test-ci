@@ -33,3 +33,4 @@ jobs:
 
       - name: create docker build
         run: docker compose -f docker-compose.prod.yml build
+        working-directory: .
