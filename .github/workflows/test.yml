@@ -42,9 +42,9 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           TAG: ${{ github.sha }}
         run: |
-            docker compose -f docker-compose.prod.yaml build
-            docker tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:$TAG
-            docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:$TAG
+          docker compose -f docker-compose.prod.yaml build
+          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:$TAG
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:$TAG
 
   connect_to_vps:
     runs-on: ubuntu-latest
