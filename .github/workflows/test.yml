@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  verify_lint:
+  verify_and_build:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,3 +30,6 @@ jobs:
       - name: test lint backend
         run: node --check index.js
         working-directory: api
+
+      - name: create docker build
+        run: docker compose -f docker-compose.prod.yml build
