@@ -31,18 +31,20 @@ jobs:
         run: node --check index.js
         working-directory: api
 
-      - name: localize
-        run: ls
+      - name: login to docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: create docker build
         run: docker compose -f docker-compose.prod.yaml build
         working-directory: .
 
-      - name: login to docker hub
-        run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
-
       - name: push docker image
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:latest
+        env:
+          TAG: ${{ github.sha }}
+        run: docker compose push
 
   connect_to_vps:
     runs-on: ubuntu-latest
