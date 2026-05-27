@@ -78,6 +78,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
+          envs: DOCKER_USERNAME, TAG
           script: |
               cd ~/react-cicd
               docker pull $DOCKER_USERNAME/react-cicd-api:$TAG
