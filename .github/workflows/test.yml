@@ -67,6 +67,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: "docker-compose.prod.yaml"
           target: "~/react-cicd"
+          timeout: 60s
+          command_timeout: 5m
 
       - name: Deploy sur VPS
         uses: appleboy/ssh-action@v1
