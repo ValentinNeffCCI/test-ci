@@ -1,0 +1,40 @@
+services:
+  api:
+    container_name: react-cicd-api
+    build: "./api"
+    environment:
+      - LOCAL_PORT_API=${LOCAL_PORT_API:-5000}
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_NAME=${DB_NAME:-react-cicd}
+    restart: unless-stopped
+    depends_on:
+      - db
+
+  frontend:
+    container_name: react-cicd-frontend
+    build: "./frontend"
+    ports:
+      - ${LOCAL_PORT:-8080}:80
+    depends_on:
+      - api
+    environment:
+      - LOCAL_PORT=${LOCAL_PORT:-8080}
+      - LOCAL_PORT_SSL=${LOCAL_PORT_SSL:-443}
+    restart: unless-stopped
+
+  db:
+    container_name: react-cicd-db
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
+      - POSTGRES_DB=${DB_NAME:-react-cicd}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
