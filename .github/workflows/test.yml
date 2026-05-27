@@ -31,6 +31,9 @@ jobs:
         run: node --check index.js
         working-directory: api
 
+      - name: localize
+        run: ls
+
       - name: create docker build
         run: docker compose -f docker-compose.prod.yml build
         working-directory: .
