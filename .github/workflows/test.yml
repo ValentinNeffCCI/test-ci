@@ -66,7 +66,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "docker-compose.prod.yaml"
-          target: "/react-cicd"
+          target: "~/react-cicd"
 
       - name: Deploy sur VPS
         uses: appleboy/ssh-action@v1
@@ -79,7 +79,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-              cd /react-cicd
+              cd ~/react-cicd
               docker pull $DOCKER_USERNAME/react-cicd-api:$TAG
               docker pull $DOCKER_USERNAME/react-cicd-frontend:$TAG
               docker stop react-cicd-api react-cicd-frontend || true
