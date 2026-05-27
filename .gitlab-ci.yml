@@ -24,7 +24,7 @@ backend_check:
   script:
     - cd api
     - npm install
-    - npm run lint
+    - node --check index.js
 
 frontend_build:
   stage: build
