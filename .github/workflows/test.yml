@@ -56,23 +56,36 @@ jobs:
     needs: verify_and_build
 
     steps:
-      - name: connect to vps
-        run: ssh ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
+      - uses: actions/checkout@v4
+
+      - name: Copier docker-compose sur le VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "docker-compose.prod.yaml"
+          target: "/react-cicd"
+
+      - name: Deploy sur VPS
+        uses: appleboy/ssh-action@v1
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          TAG: ${{ github.sha }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+              cd /react-cicd
+              docker pull $DOCKER_USERNAME/react-cicd-api:$TAG
+              docker pull $DOCKER_USERNAME/react-cicd-frontend:$TAG
+              docker stop react-cicd-api react-cicd-frontend || true
+              docker rm react-cicd-api react-cicd-frontend || true
+              TAG=$TAG DOCKER_USERNAME=$DOCKER_USERNAME LOCAL_PORT=80 \
+                            docker compose -f docker-compose.prod.yaml up -d --no-deps api frontend
 
       - name: verify_connection
         run: ls
-
-  #     - name: stop working docker
-  #       run: docker stop $(docker ps -q)
-
-  #     - name: remove working docker
-  #       run: docker rm $(docker ps -aq)
-
-  #     - name: pull latest docker image
-  #       run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:latest
-
-  #     - name: run docker image
-  #       run: docker run -d ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:latest
-
-  #     - name: list running containers
-  #       run: docker ps -a
