@@ -13,7 +13,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: "22.x"
 
       - name: Install dependencies
         run: npm install
@@ -37,14 +37,18 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: create docker build
+      - name: Build Docker images
         run: docker compose -f docker-compose.prod.yaml build
-        working-directory: .
 
-      - name: push docker image
+      - name: Push Docker images
+        run: docker compose -f docker-compose.prod.yaml push
+
+      - name: tag et push avec sha
         env:
           TAG: ${{ github.sha }}
-        run: docker compose push
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:$TAG
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:$TAG
 
   connect_to_vps:
     runs-on: ubuntu-latest
