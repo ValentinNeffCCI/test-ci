@@ -13,10 +13,6 @@ function App() {
   const [newItemName, setNewItemName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
   const fetchItems = () => {
     fetch("/api/items")
       .then((res) => res.json())
@@ -47,6 +43,10 @@ function App() {
       })
       .finally(() => setIsLoading(false));
   };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   return (
     <main className="app-container">
