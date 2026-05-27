@@ -22,7 +22,7 @@ backend_check:
   stage: verify
   image: node:22-alpine
   script:
-    - cd backend
+    - cd api
     - npm install
     - npm run lint
 
