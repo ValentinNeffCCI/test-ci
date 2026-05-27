@@ -37,11 +37,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build Docker images
-        run: docker compose -f docker-compose.prod.yaml build
-
-      - name: Push Docker images
-        run: docker compose -f docker-compose.prod.yaml push
+      - name: Build and Push Docker images
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: |
+            docker compose -f docker-compose.prod.yaml build
+            docker compose -f docker-compose.prod.yaml push
 
       - name: tag et push avec sha
         env:
