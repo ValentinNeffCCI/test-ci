@@ -44,8 +44,10 @@ jobs:
         run: |
           set -e
           docker compose -f docker-compose.prod.yaml build
-          docker images
-          docker compose -f docker-compose.prod.yaml push
+
+          docker tag $DOCKER_USERNAME/react-cicd-api:latest $DOCKER_USERNAME/react-cicd-api:$TAG
+          docker tag $DOCKER_USERNAME/react-cicd-frontend:latest $DOCKER_USERNAME/react-cicd-frontend:$TAG
+
           docker push $DOCKER_USERNAME/react-cicd-api:$TAG
           docker push $DOCKER_USERNAME/react-cicd-frontend:$TAG
 
