@@ -42,6 +42,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           TAG: ${{ github.sha }}
         run: |
+          docker compose -f docker-compose.prod.yaml build
           docker compose -f docker-compose.prod.yaml push
           docker push $DOCKER_USERNAME/react-cicd-api:$TAG
           docker push $DOCKER_USERNAME/react-cicd-frontend:$TAG
