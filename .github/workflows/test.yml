@@ -35,5 +35,5 @@ jobs:
         run: ls
 
       - name: create docker build
-        run: docker compose -f docker-compose.prod.yml build
+        run: docker compose -f docker-compose.prod.yaml build
         working-directory: .
