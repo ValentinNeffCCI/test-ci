@@ -15,6 +15,14 @@ jobs:
         with:
           node-version: '22.x'
 
+      - name: Install dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: api
+
       - name: test lint frontend
         run: npm run lint
         working-directory: frontend
