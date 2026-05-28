@@ -84,6 +84,9 @@ jobs:
             set -e
             cd ~/react-cicd
             docker stop $(docker ps -aq) || true
+            echo "DOCKER_USERNAME=$DOCKER_USERNAME" > .env
+            echo "TAG=$TAG" >> .env
+            echo "DOCKER_TOKEN=$DOCKER_TOKEN" >> .env
             echo "$DOCKER_TOKEN" | \
               docker login -u "$DOCKER_USERNAME" --password-stdin
             docker rm react-cicd-api react-cicd-frontend || true
