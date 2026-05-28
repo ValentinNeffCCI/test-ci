@@ -85,5 +85,5 @@ jobs:
               docker stop $(docker ps -q)
               docker rm react-cicd-api react-cicd-frontend || true
               TAG=$TAG DOCKER_USERNAME=$DOCKER_USERNAME LOCAL_PORT=80 \
-                            docker compose -f docker-compose.prod.yaml up -d --no-deps api frontend
+                            docker compose -f docker-compose.prod.yaml up -d --build
               exit 0
