@@ -81,7 +81,7 @@ jobs:
           script: |
               set -e
               cd ~/react-cicd
-              docker stop $(docker ps -q) || true
+              docker stop $(docker ps -aq) || true
               echo "${{ secrets.DOCKERHUB_TOKEN }}" | \
                 docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
               docker rm react-cicd-api react-cicd-frontend || true
