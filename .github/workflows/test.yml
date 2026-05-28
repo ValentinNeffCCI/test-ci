@@ -81,10 +81,10 @@ jobs:
           script: |
               set -e
               cd ~/react-cicd
-              docker stop $(docker ps -q)
+              docker stop $(docker ps -q) || true
               echo "${{ secrets.DOCKERHUB_TOKEN }}" | \
                 docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-              docker rm react-cicd-api react-cicd-frontend
+              docker rm react-cicd-api react-cicd-frontend || true
               TAG=$TAG DOCKER_USERNAME=$DOCKER_USERNAME LOCAL_PORT=80 \
                             docker compose -f docker-compose.prod.yaml up -d --build
               docker compose -f docker-compose.prod.yaml ps
