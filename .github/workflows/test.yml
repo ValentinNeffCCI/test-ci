@@ -58,17 +58,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Copier docker-compose sur le VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          source: "docker-compose.prod.yaml"
-          target: "~/react-cicd"
-          timeout: 60s
-          command_timeout: 5m
+      - name: Copy docker-compose to VPS
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/key && chmod 600 /tmp/key
+          scp -i /tmp/key -P ${{ secrets.SSH_PORT }} \
+            -o StrictHostKeyChecking=no \
+            docker-compose.prod.yaml \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/react-cicd/
+          rm /tmp/key
 
       - name: Deploy sur VPS
         uses: appleboy/ssh-action@v1
