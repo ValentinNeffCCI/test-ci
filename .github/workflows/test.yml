@@ -80,15 +80,15 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           envs: DOCKER_USERNAME, TAG, DOCKER_TOKEN
           script: |
-              set -e
-              cd ~/react-cicd
-              docker stop $(docker ps -aq) || true
-              echo "$DOCKER_TOKEN" | \
-                docker login -u "$DOCKER_USERNAME" --password-stdin
-              docker rm react-cicd-api react-cicd-frontend || true
-              docker pull ${DOCKER_USERNAME}/react-cicd-api:latest
-              docker pull ${DOCKER_USERNAME}/react-cicd-frontend:latest
-              TAG=$TAG DOCKER_USERNAME=$DOCKER_USERNAME LOCAL_PORT=80 \
-                            docker run -d --name react-cicd-api ${DOCKER_USERNAME}/react-cicd-api:latest && \
-                            docker run -d --name react-cicd-frontend ${DOCKER_USERNAME}/react-cicd-frontend:latest
-              exit 0
+            set -e
+            cd ~/react-cicd
+            docker stop $(docker ps -aq) || true
+            echo "$DOCKER_TOKEN" | \
+              docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker rm react-cicd-api react-cicd-frontend || true
+            docker pull ${DOCKER_USERNAME}/react-cicd-api:latest
+            docker pull ${DOCKER_USERNAME}/react-cicd-frontend:latest
+            TAG=$TAG DOCKER_USERNAME=$DOCKER_USERNAME LOCAL_PORT=80 \
+                          docker compose -f docker-compose.prod.yaml up -d --build
+            docker compose -f docker-compose.prod.yaml ps
+            exit 0
