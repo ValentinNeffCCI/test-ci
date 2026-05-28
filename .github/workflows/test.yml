@@ -72,17 +72,18 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           TAG: ${{ github.sha }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          envs: DOCKER_USERNAME, TAG
+          envs: DOCKER_USERNAME, TAG, DOCKER_TOKEN
           script: |
               set -e
               cd ~/react-cicd
               docker stop $(docker ps -aq) || true
-              echo "${{ secrets.DOCKERHUB_TOKEN }}" | \
+              echo "$DOCKER_TOKEN" | \
                 docker login -u "$DOCKER_USERNAME" --password-stdin
               docker rm react-cicd-api react-cicd-frontend || true
               TAG=$TAG DOCKER_USERNAME=$DOCKER_USERNAME LOCAL_PORT=80 \
